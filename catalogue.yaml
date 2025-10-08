@@ -46,6 +46,38 @@
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
+  
+  - name: Install packages based on npm
+    community.general.npm:
+      path: /app 
+  
+  - name: copy catalogue repo
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+  
+  - name: copy mongo repo
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: install mongodb server
+    ansible.builtin.dnf:
+      name: mongodb-mongosh
+      state: present
+  
+  - name: connect to mongodb catalohue
+    ansible.builtin.command: mongosh --host mongodb.sindhuworld.icu </app/db/master-data.js
+    register: catalogue_output
+
+  - name: print catalogue output
+    ansible.builtin.debug:
+      msg: "{{ catalogue_output }}"
+  
+
+  
+
+
 
 
 
