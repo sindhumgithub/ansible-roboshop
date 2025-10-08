@@ -1,0 +1,19 @@
+- name: setup redis server
+  hosts: mysql
+  become: yes
+  tasks:
+  - name: Install the latest version of mysql
+    ansible.builtin.dnf:
+      name: mysql-server
+      state: present
+
+  - name: Start and enabled mysql service 
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+
+  - name: Setup the root password 
+    ansible.builtin.command: mysql_secure_installation --set-root-pass RoboShop@1
+
+    
