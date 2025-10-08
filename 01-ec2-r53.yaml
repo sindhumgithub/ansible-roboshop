@@ -8,7 +8,7 @@
     domain_name: "sindhuworld.icu"
     instances: 
     - mongodb
-    # - redis
+    - redis
     # - mysql
     # - rabbitmq
   tasks:
