@@ -3,7 +3,7 @@
   connection: local
   vars:
     ami_id: ami-09c813fb71547fc4f
-    sg_id: sg-023c097e027f7e100
+    sg_id: sg-023c097e027f7e100     # replace with security group
     zone_id: "Z0241416CL0FGN1HPJLK" 
     domain_name: "sindhuworld.icu"
     instances: 
