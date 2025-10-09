@@ -42,18 +42,21 @@
       remote_src: yes
 
   - name: Change to /app and initialize go module
-    ansible.builtin.command: go mod init dispatch
-    chdir: /app
+    ansible.builtin.command: 
+      cmd: go mod init dispatch
+      chdir: /app
     args:
       creates: /app/go.mod  
   
   - name: Download Go dependencies
-    ansible.builtin.command: go get
-    chdir: /app
+    ansible.builtin.command: 
+      cmd: go get
+      chdir: /app
 
   - name: Build Go dependencies
-    ansible.builtin.command: go build
-    chdir: /app
+    ansible.builtin.command: 
+      cmd: go build
+      chdir: /app
 
   - name: copy dispatch service
     ansible.builtin.copy:
