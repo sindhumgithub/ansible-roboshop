@@ -10,6 +10,14 @@
     - maven
     - mysql
 
+  - name: install mysql python libraries
+    ansible.builtin.pip:
+      executable: pip3.9
+      name: "{{ item }}"
+    loop:
+    - cryptography
+    - PyMySQL
+
   - name: create roboshop system user
     ansible.builtin.user:
       name: roboshop
@@ -17,7 +25,7 @@
       system: true
       shell: /sbin/nologin
       home: /app
-  # Safe to remove directory, because 2nd time if we run it will download freshly. no error if does not exist
+
   - name: remove app directory
     ansible.builtin.file:
       path: /app
@@ -35,7 +43,7 @@
 
   - name: download shipping application
     ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip
       dest: /tmp/shipping.zip
 
   - name: extract shipping application
@@ -46,33 +54,37 @@
 
   - name: install dependencies
     ansible.builtin.command: mvn clean package
-  
+    args:
+      chdir: /app
+
   - name: move jar file
     ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
     args:
-      chdir: /app 
+      chdir: /app
 
   - name: copy shipping service
     ansible.builtin.copy:
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
 
-  - name: Import shipping data into mysql
+  - name: import shipping data into mysql
     community.mysql.mysql_db:
-      state: Import
+      state: import
       name: all
       login_host: mysql.sindhuworld.icu
       login_user: root
       login_password: RoboShop@1
       target: "{{ item }}"
-    loop: 
+    loop:
     - /app/db/schema.sql
     - /app/db/app-user.sql 
     - /app/db/master-data.sql
 
-
-
-
-
+  - name: daemon reload enable and start
+    ansible.builtin.systemd_service:
+      name: shipping
+      enabled: true
+      state: started
+      daemon_reload: true
 
   
