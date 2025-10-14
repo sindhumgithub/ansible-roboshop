@@ -8,13 +8,13 @@
     domain_name: "sindhuworld.icu"
     instances: 
     - mongodb
-    - redis
-    - mysql
-    - rabbitmq
-    - cart
-    - catalogue
-    - shipping
-    - user
+    # - redis
+    # - mysql
+    # - rabbitmq
+    # - cart
+    # - catalogue
+    # - shipping
+    # - user
   tasks:
   - name: create ec2 instance
     amazon.aws.ec2_instance:
